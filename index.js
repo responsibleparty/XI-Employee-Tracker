@@ -1,9 +1,12 @@
-const inquirer = require("inquirer");
-const mysql = require("mysql2");
+//importing files
 const initQs = require("./lib/questions");
 const Qs = require("./lib/query");
-
+//importing packages
+const inquirer = require("inquirer");
+const mysql = require("mysql2");
 require('console.table');
+
+//database connection object
 const db = mysql.createConnection({
     host: "localhost",
     post: 3306,
@@ -12,6 +15,7 @@ const db = mysql.createConnection({
     database: "employees_db"
 });
 
+//database connection
 db.connect((err) => {
     if(err){
         console.log(err);
@@ -20,6 +24,10 @@ db.connect((err) => {
     console.log("Connected to databases");
 })
 
+
+//functions for each question
+
+//shows all employees in database
 const viewEmployees = () => {
     db.query(Qs.viewEmployees, (err, result) => {
         if (err) console.error(err);
@@ -28,6 +36,7 @@ const viewEmployees = () => {
     })
 };
 
+//shows all departments in database
 const viewDepartments = () => {
     db.query("SELECT * FROM department", (err, result) => {
         if (err) console.error(err);
@@ -36,6 +45,7 @@ const viewDepartments = () => {
     })
 }
 
+//shows all roles in database
 const viewRoles = () =>{
     db.query(Qs.viewRoles, (err, result) => {
         if (err) console.error(err);
@@ -44,8 +54,10 @@ const viewRoles = () =>{
     })
 }
 
+//main function to run app
 const init = async () => {
     let userPick = await inquirer.prompt(initQs);
+    //a switch statement to help delegate which function will be ran
     switch (userPick.userChoice){
        case "View All Employees":
             viewEmployees();
